@@ -3,10 +3,13 @@
 #include "decoder/decoder.h"
 using namespace std;
 int main(){
-//    freopen("testcases/expr.data","r",stdin);
+    freopen("testcases/pi.data","r",stdin);
+//    freopen("a.debug","w",stdout);
     read_file r;
     r.load_data();
-    my_CPU cpu(r.get_data());
+    my_mem mp(r.get_data(),1);
+    my_CPU cpu;
+    cpu.init(&mp);
     while(true){
         cpu.execute();
         cpu.tick();

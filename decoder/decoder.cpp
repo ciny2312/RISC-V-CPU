@@ -1,6 +1,5 @@
 #include "decoder.h"
 #include <stdexcept>
-void my_decoder::tick() { cnt = 0; }
 
 my_imm_type my_decoder::get_imm() const { return imm; }
 
@@ -8,7 +7,7 @@ my_op_type my_decoder::get_op() const { return op; }
 
 my_alu_type my_decoder::get_alu() const { return alu; }
 
-my_branch_type my_decoder::get_branch() const { return branch; }
+my_alu_type my_decoder::get_branch() const { return branch; }
 
 void my_decoder::decode(uint32_t ins) {
   instruction = ins;
@@ -106,15 +105,15 @@ void my_decoder::decode(uint32_t ins) {
   }
 
   if (imm != my_imm_type::B) {
-    branch = my_branch_type::Eq;
+    branch = my_alu_type::Eq;
   } else {
     auto funct3 = get_bits(instruction, 12, 14);
-    if(funct3==0b000) branch=my_branch_type::Eq;
-    else if(funct3==0b101) branch=my_branch_type::Ge;
-    else if(funct3==0b111) branch=my_branch_type::GeU;
-    else if(funct3==0b100) branch=my_branch_type::Lt;
-    else if(funct3==0b110) branch=my_branch_type::LtU;
-    else if(funct3==0b001) branch=my_branch_type::Ne;
+    if(funct3==0b000) branch=my_alu_type::Eq;
+    else if(funct3==0b101) branch=my_alu_type::Ge;
+    else if(funct3==0b111) branch=my_alu_type::GeU;
+    else if(funct3==0b100) branch=my_alu_type::Lt;
+    else if(funct3==0b110) branch=my_alu_type::LtU;
+    else if(funct3==0b001) branch=my_alu_type::Ne;
     else{
       std::cerr<<funct3<<"No match branch type\n";
       throw std::runtime_error("No match branch type");

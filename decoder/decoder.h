@@ -3,33 +3,19 @@
 #include <fstream>
 #include <iostream>
 #include <map>
-enum my_imm_type{
-    R,I,Ishift,S,B,U,J
-};
-enum my_alu_type{
-    Add,And,Or,Sub,Xor,ShiftL,ShiftRArith,
-    ShiftRLogical,UseLatter,SetLTSigned,SetLTUnsigned
-};
-enum my_op_type{
-    Arith,MemRead,MemWrite,Branch
-};
-enum my_branch_type{
-    Eq,Ne,GeU,LtU,Ge,Lt
-};
+#include "../types.h"
 class my_decoder{
-    int cnt=0;
     uint32_t instruction;
     my_op_type op;
     my_alu_type alu;
     my_imm_type imm;
-    my_branch_type branch;
+    my_alu_type branch;
     public:
-    void tick();
     void decode(uint32_t);
     my_alu_type get_alu()const;
     my_imm_type get_imm()const;
     my_op_type get_op()const;
-    my_branch_type get_branch()const;
+    my_alu_type get_branch()const;
 };
 
 class read_file {
