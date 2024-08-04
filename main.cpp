@@ -3,7 +3,7 @@
 #include "decoder/decoder.h"
 using namespace std;
 int main(){
-    freopen("testcases/pi.data","r",stdin);
+//    freopen("testcases/pi.data","r",stdin);
 //    freopen("a.debug","w",stdout);
     read_file r;
     r.load_data();
