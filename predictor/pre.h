@@ -3,54 +3,54 @@
 #include <array>
 #include <cstdint>
 class my_pre {
-  inline int hash(uint32_t pc) { return (pc >> 2) & ((1 << 6) - 1); }
+  inline int hash(uint32_t PC) { return ((PC >> 3) + 5) & ((1 << 6) - 1); }
 
-  std::array<int, 1 << 6> his;
-  std::array<std::array<my_pre_type, 1 << 4>, 1 << 6> stat;
+  std::array<int, 1 << 6> vis;
+  std::array<std::array<my_pre_type, 1 << 4>, 1 << 6> predictor;
 
 public:
   long long total=0,success=0;
 
-  bool get_prediction(uint32_t pc) {
-    auto ind = hash(pc);
-    return stat[ind][his[ind]] == my_pre_type::yes_weak ||
-           stat[ind][his[ind]] == my_pre_type::yes_strong;
+  bool get_prediction(uint32_t PC) {
+    auto pos = hash(PC);
+    return predictor[pos][vis[pos]] == my_pre_type::AC1 ||
+           predictor[pos][vis[pos]] == my_pre_type::AC2;
   }
-  void update(uint32_t pc, bool ok) {
+  void update(uint32_t PC, bool right) {
     ++total;
-    if (ok)
+    if (right)
       ++success;
-    bool jumped = (get_prediction(pc) == ok);
-    int ind = hash(pc);
-    auto &st = stat[ind][his[ind]];
+    bool jumped = (get_prediction(PC) == right);
+    int pos = hash(PC);
+    auto &st = predictor[pos][vis[pos]];
     switch (st) {
-    case not_strong:
+    case WA2:
       if (jumped)
-        st = not_weak;
+        st = WA1;
       break;
-    case not_weak:
+    case WA1:
       if (jumped)
-        st = yes_weak;
+        st = AC1;
       else
-        st = not_strong;
+        st = WA2;
       break;
-    case yes_weak:
+    case AC1:
       if (jumped)
-        st = yes_strong;
+        st = AC2;
       else
-        st = not_weak;
+        st = WA1;
       break;
-    case yes_strong:
+    case AC2:
       if (!jumped)
-        st = yes_weak;
+        st = AC1;
       break;
     }
-    his[ind] = ((his[ind] << 1) | jumped) & ((1 << 4) - 1);
+    vis[pos] = ((vis[pos] << 1) | jumped) & ((1 << 4) - 1);
   }
   void tick() {}	
   void init() {
-		stat.fill({});
-		his.fill(0);
+		predictor.fill({});
+		vis.fill(0);
 		total = success = 0;
 	}
 

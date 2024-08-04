@@ -13,7 +13,7 @@ enum class my_alu_type{
 enum my_op_type{
     Arith,MemRead,MemWrite,Branch
 };
-enum my_pre_type { not_strong, not_weak, yes_weak, yes_strong };
+enum my_pre_type { AC1,AC2,WA1,WA2 };
 
 enum my_mem_type{
     Byte,Half,Word,HalfSign,ByteSign,Hang
